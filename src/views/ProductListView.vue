@@ -46,9 +46,16 @@
           @click="changePage(activePage + 1)"
         >
           &gt;
+        </div>
+      </div>
     </div>
+    <div :class="[loading ? 'loading' : 'products']">
+      <template v-if="loading">Loading...</template>
+      <template v-else>
+        <pre v-if="productList?.total">{{ productList?.products }}</pre>
+        <template v-else>{{ getMessage }}</template>
+      </template>
     </div>
-  </div>
   </div>
 </template>
 
@@ -62,6 +69,7 @@ const searchPhrase = ref('')
 const productsPerPage = ref(10)
 const productsPerPageOptions = [10, 25, 50, 100]
 const howManyToSkip = ref(0)
+const loading = ref(true)
 const productList = computed(() => productStore.productList)
 const howManyPages = computed(() =>
   Math.ceil((productList.value?.total || 0) / productsPerPage.value),
@@ -75,18 +83,21 @@ const getMessage = computed(() =>
 
 let searchTimeout: number | null = null
 
-const getProducts = async () =>
+const getProducts = async () => {
+  loading.value = true
   await productStore.getProductList({
     searchPhrase: searchPhrase.value,
     productsPerPage: productsPerPage.value,
     howManyToSkip: howManyToSkip.value,
   })
+  loading.value = false
+}
 
 const debouncedSearch = (e: any) => {
   searchPhrase.value = e.target.value
   if (searchTimeout) clearTimeout(searchTimeout)
-  searchTimeout = setTimeout(async () => {
-    await getProducts()
+  searchTimeout = setTimeout(() => {
+    getProducts()
   }, 2000)
 }
 
@@ -113,8 +124,8 @@ const isPageNumberVisible = (page: number) => {
 
 watch([productsPerPage, howManyToSkip], getProducts)
 
-onBeforeMount(async () => {
-  await getProducts()
+onBeforeMount(() => {
+  getProducts()
 })
 </script>
 
