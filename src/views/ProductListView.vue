@@ -19,8 +19,36 @@
           {{ option }}
         </option>
       </select>
+      <div
+        v-if="productList?.total && howManyPages > 1"
+        class="pagination__list"
+      >
+        <div
+          v-if="howManyToSkip > 0"
+          class="pagination__item arrow"
+          @click="changePage(activePage - 1)"
+        >
+          &lt;
+        </div>
+        <template v-for="page in howManyPages" :key="page">
+          <div
+            v-if="isPageNumberVisible(page)"
+            class="pagination__item number"
+            :class="{ active: page === activePage }"
+            @click="changePage(page)"
+          >
+            {{ page }}
+          </div></template
+        >
+        <div
+          v-if="howManyToSkip + productsPerPage < productList?.total"
+          class="pagination__item"
+          @click="changePage(activePage + 1)"
+        >
+          &gt;
     </div>
-    <pre>{{ productList?.products }}</pre>
+    </div>
+  </div>
   </div>
 </template>
 
@@ -35,6 +63,15 @@ const productsPerPage = ref(10)
 const productsPerPageOptions = [10, 25, 50, 100]
 const howManyToSkip = ref(0)
 const productList = computed(() => productStore.productList)
+const howManyPages = computed(() =>
+  Math.ceil((productList.value?.total || 0) / productsPerPage.value),
+)
+const activePage = computed(
+  () => (howManyToSkip.value + productsPerPage.value) / productsPerPage.value,
+)
+const getMessage = computed(() =>
+  productList.value?.error ? 'Error' : 'Empty',
+)
 
 let searchTimeout: number | null = null
 
@@ -53,6 +90,27 @@ const debouncedSearch = (e: any) => {
   }, 2000)
 }
 
+const changePage = (page: number) => {
+  howManyToSkip.value = page * productsPerPage.value - productsPerPage.value
+}
+
+const isPageNumberVisible = (page: number) => {
+  const maxPageToShow = 5
+  const { value: active } = activePage
+  const { value: total } = howManyPages
+
+  const pageWithinStart = page <= maxPageToShow && active <= maxPageToShow
+  const pageCloseToStart = pageWithinStart && active - page <= 2
+
+  const pageWithinMiddle = active - page <= 2 && active - page >= -2
+
+  const pageWithinEnd =
+    page > total - maxPageToShow && active > total - maxPageToShow
+  const pageCloseToEnd = pageWithinEnd && active - page >= -2
+
+  return pageCloseToStart || pageWithinMiddle || pageCloseToEnd
+}
+
 watch([productsPerPage, howManyToSkip], getProducts)
 
 onBeforeMount(async () => {
@@ -66,6 +124,16 @@ onBeforeMount(async () => {
     min-height: 100vh;
     display: flex;
     align-items: center;
+  }
+}
+.pagination__list {
+  display: flex;
+}
+.pagination__item {
+  cursor: pointer;
+
+  &.active {
+    color: #0090ff;
   }
 }
 </style>
