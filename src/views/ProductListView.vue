@@ -1,6 +1,9 @@
 <template>
   <div class="product-list">
     <h1>{{ title }}</h1>
+    <div class="controls">
+      <input :value="searchPhrase" type="text" @input="debouncedSearch" />
+    </div>
     <pre>{{ productList }}</pre>
   </div>
 </template>
@@ -16,12 +19,22 @@ const productsPerPage = ref(10)
 const howManyToSkip = ref(0)
 const productList = computed(() => productStore.productList)
 
+let searchTimeout: number | null = null
+
 const getProducts = async () =>
   await productStore.getProductList({
     searchPhrase: searchPhrase.value,
     productsPerPage: productsPerPage.value,
     howManyToSkip: howManyToSkip.value,
   })
+
+const debouncedSearch = (e: any) => {
+  searchPhrase.value = e.target.value
+  if (searchTimeout) clearTimeout(searchTimeout)
+  searchTimeout = setTimeout(async () => {
+    await getProducts()
+  }, 2000)
+}
 
 watch([productsPerPage, howManyToSkip], getProducts)
 
