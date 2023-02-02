@@ -1,87 +1,59 @@
 <template>
-  <div class="product-list">
-    <h1>{{ title }}</h1>
-    <div class="controls">
-      <input :value="searchPhrase" type="text" @input="debouncedSearch" />
-    </div>
-    <div class="filters">
-      <div class="filters__total">
-        <span>{{ productList?.limit }} of {{ productList?.total }}</span>
-      </div>
-    </div>
-    <div class="pagination">
-      <select v-model="productsPerPage" class="pagination__limit">
-        <option
-          v-for="option in productsPerPageOptions"
-          :key="option"
-          :value="option"
-        >
-          {{ option }}
-        </option>
-      </select>
-      <div
-        v-if="productList?.total && howManyPages > 1"
-        class="pagination__list"
-      >
-        <div
-          v-if="howManyToSkip > 0"
-          class="pagination__item arrow"
-          @click="changePage(activePage - 1)"
-        >
-          &lt;
-        </div>
-        <template v-for="page in howManyPages" :key="page">
-          <div
-            v-if="isPageNumberVisible(page)"
-            class="pagination__item number"
-            :class="{ active: page === activePage }"
-            @click="changePage(page)"
-          >
-            {{ page }}
-          </div></template
-        >
-        <div
-          v-if="howManyToSkip + productsPerPage < productList?.total"
-          class="pagination__item"
-          @click="changePage(activePage + 1)"
-        >
-          &gt;
-        </div>
-      </div>
-    </div>
-    <div :class="[loading ? 'loading' : 'products']">
-      <template v-if="loading">Loading...</template>
-      <template v-else>
-        <pre v-if="productList?.total">{{ productList?.products }}</pre>
-        <template v-else>{{ getMessage }}</template>
-      </template>
-    </div>
-  </div>
+  <PageLayout :title="title" class="product-list">
+    <SearchBlock
+      class="product-list__search-block"
+      :search-phrase="searchPhrase"
+      @search-input="searchProducts"
+    />
+    <hr class="product-list__hr" />
+    <FiltersBlock
+      class="product-list__filters-block"
+      :limit="productList?.limit"
+      :total="productList?.total"
+    />
+    <ListWrapper
+      class="product-list__list-wrapper"
+      :loading="loading"
+      :total="productList?.total"
+      :error="productList?.error"
+      empty-message="No products to display"
+      error-message="Loading failed"
+    >
+      <ProductItem
+        v-for="product in productList?.products"
+        :key="product.id"
+        class="product-list__item"
+        :product="product"
+      />
+    </ListWrapper>
+    <PaginationBlock
+      class="product-list__pagination-block"
+      :products-per-page="productsPerPage"
+      :total-items="productList?.total"
+      :how-many-to-skip="howManyToSkip"
+      @change-page-limit="changePageLimit"
+      @change-page="changePage"
+    />
+  </PageLayout>
 </template>
 
 <script lang="ts" setup>
 import { computed, onBeforeMount, ref, watch } from 'vue'
 import { useProductStore } from '@/stores/products.store'
+import PaginationBlock from '@/components/PaginationBlock.vue'
+import SearchBlock from '@/components/SearchBlock.vue'
+import FiltersBlock from '@/components/FiltersBlock.vue'
+import PageLayout from '@/components/PageLayout.vue'
+import ProductItem from '@/components/ProductItem.vue'
+import ListWrapper from '@/components/ListWrapper.vue'
 
 const title = ref('Front End Challenge')
 const productStore = useProductStore()
 const searchPhrase = ref('')
 const productsPerPage = ref(10)
-const productsPerPageOptions = [10, 25, 50, 100]
 const howManyToSkip = ref(0)
 const loading = ref(true)
 const productList = computed(() => productStore.productList)
-const howManyPages = computed(() =>
-  Math.ceil((productList.value?.total || 0) / productsPerPage.value),
-)
-const activePage = computed(
-  () => (howManyToSkip.value + productsPerPage.value) / productsPerPage.value,
-)
-const getMessage = computed(() =>
-  productList.value?.error ? 'Error' : 'Empty',
-)
-
-let searchTimeout: number | null = null
 
 const getProducts = async () => {
   loading.value = true
@@ -92,37 +64,17 @@ const getProducts = async () => {
   })
   loading.value = false
 }
-
-const debouncedSearch = (e: any) => {
-  searchPhrase.value = e.target.value
-  if (searchTimeout) clearTimeout(searchTimeout)
-  searchTimeout = setTimeout(() => {
-    getProducts()
-  }, 2000)
+const searchProducts = (search: string) => {
+  searchPhrase.value = search
 }
-
+const changePageLimit = (e: any) => {
+  productsPerPage.value = parseInt(e.target.value) || 10
+}
 const changePage = (page: number) => {
   howManyToSkip.value = page * productsPerPage.value - productsPerPage.value
 }
 
-const isPageNumberVisible = (page: number) => {
-  const maxPageToShow = 5
-  const { value: active } = activePage
-  const { value: total } = howManyPages
-
-  const pageWithinStart = page <= maxPageToShow && active <= maxPageToShow
-  const pageCloseToStart = pageWithinStart && active - page <= 2
-
-  const pageWithinMiddle = active - page <= 2 && active - page >= -2
-
-  const pageWithinEnd =
-    page > total - maxPageToShow && active > total - maxPageToShow
-  const pageCloseToEnd = pageWithinEnd && active - page >= -2
-
-  return pageCloseToStart || pageWithinMiddle || pageCloseToEnd
-}
-
-watch([productsPerPage, howManyToSkip], getProducts)
+watch([searchPhrase, productsPerPage, howManyToSkip], getProducts)
 
 onBeforeMount(() => {
   getProducts()
@@ -134,17 +86,8 @@ onBeforeMount(() => {
   .product-list {
     min-height: 100vh;
     display: flex;
-    align-items: center;
-  }
-}
-.pagination__list {
-  display: flex;
-}
-.pagination__item {
-  cursor: pointer;
-
-  &.active {
-    color: #0090ff;
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
 </style>
