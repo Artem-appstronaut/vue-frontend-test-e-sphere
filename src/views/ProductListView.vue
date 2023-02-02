@@ -4,6 +4,11 @@
     <div class="controls">
       <input :value="searchPhrase" type="text" @input="debouncedSearch" />
     </div>
+    <div class="filters">
+      <div class="filters__total">
+        <span>{{ productList?.limit }} of {{ productList?.total }}</span>
+      </div>
+    </div>
     <div class="pagination">
       <select v-model="productsPerPage" class="pagination__limit">
         <option
@@ -15,7 +20,7 @@
         </option>
       </select>
     </div>
-    <pre>{{ productList }}</pre>
+    <pre>{{ productList?.products }}</pre>
   </div>
 </template>
 
