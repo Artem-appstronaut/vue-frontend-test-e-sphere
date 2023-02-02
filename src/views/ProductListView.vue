@@ -4,6 +4,17 @@
     <div class="controls">
       <input :value="searchPhrase" type="text" @input="debouncedSearch" />
     </div>
+    <div class="pagination">
+      <select v-model="productsPerPage" class="pagination__limit">
+        <option
+          v-for="option in productsPerPageOptions"
+          :key="option"
+          :value="option"
+        >
+          {{ option }}
+        </option>
+      </select>
+    </div>
     <pre>{{ productList }}</pre>
   </div>
 </template>
@@ -16,6 +27,7 @@ const title = ref('Front End Challenge')
 const productStore = useProductStore()
 const searchPhrase = ref('')
 const productsPerPage = ref(10)
+const productsPerPageOptions = [10, 25, 50, 100]
 const howManyToSkip = ref(0)
 const productList = computed(() => productStore.productList)
 
