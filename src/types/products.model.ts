@@ -16,6 +16,12 @@ export interface Product {
   images: string[]
 }
 
+export interface QueryParams {
+  searchPhrase?: string
+  productsPerPage: number
+  howManyToSkip: number
+}
+
 export interface ProductList {
   products: Product[]
   total: number

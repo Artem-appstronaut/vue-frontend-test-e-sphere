@@ -1,12 +1,12 @@
 import axiosInstance from '@/api'
-import type { ProductList } from '@/types/products.model'
+import type { ProductList, QueryParams } from '@/types/products.model'
 
 const productService = {
-  fetchProducts: async (
-    searchPhrase: string = '',
-    productsPerPage: number = 10,
-    howManyToSkip: number = 0,
-  ): Promise<ProductList> => {
+  fetchProducts: async ({
+    searchPhrase,
+    productsPerPage,
+    howManyToSkip,
+  }: QueryParams): Promise<ProductList> => {
     try {
       const { data } = await axiosInstance.get(
         `products/search?q=${searchPhrase}&limit=${productsPerPage}&skip=${howManyToSkip}`,
@@ -18,8 +18,8 @@ const productService = {
       return {
         products: [],
         total: 0,
-        skip: howManyToSkip,
         limit: productsPerPage,
+        skip: howManyToSkip,
         error: true,
       }
     }
