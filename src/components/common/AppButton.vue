@@ -33,6 +33,7 @@ defineEmits(['click'])
 
   &--active {
     background-color: var(--color-accent);
+    color: #fff;
   }
 }
 </style>
