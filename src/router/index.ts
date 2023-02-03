@@ -5,11 +5,6 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
-      redirect: { name: 'productList' }, // homepage disabled
-    },
-    {
-      path: '/product-list',
       name: 'productList',
       component: () => import('../views/ProductListView.vue'),
     },
