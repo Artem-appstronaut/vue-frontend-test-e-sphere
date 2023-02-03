@@ -11,7 +11,7 @@
     <hr class="product-list__hr" />
     <FiltersBlock
       class="product-list__filters-block"
-      :limit="productList?.limit"
+      :limit="productsPerPage"
       :total="productList?.total"
       @switch-sort="switchSort"
     />
