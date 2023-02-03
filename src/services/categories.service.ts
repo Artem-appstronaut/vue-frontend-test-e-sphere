@@ -1,5 +1,5 @@
 import axiosInstance from '@/api'
-import type { Categories } from '@/types/products.model'
+import type { Categories } from '@/types/categories.model'
 
 const categoriesService = {
   fetchCategories: async (): Promise<Categories> => {
