@@ -15,7 +15,7 @@
             v-if="product.discountPercentage"
             class="product-item__price-discount"
           >
-            {{ discountedPrice }}
+            $ {{ discountedPrice }}
           </div>
           <div
             class="product-item__price-value"
@@ -24,10 +24,12 @@
                 product.discountPercentage,
             }"
           >
-            {{ product.price }}
+            $ {{ product.price }}
           </div>
         </div>
-        <div class="product-item__rating">{{ product.rating }}</div>
+        <div class="product-item__rating">
+          <RatingStars :rating="product.rating" />
+        </div>
       </div>
     </div>
   </div>
@@ -36,6 +38,7 @@
 <script lang="ts" setup>
 import type { Product } from '@/types/products.model'
 import { computed } from 'vue'
+import RatingStars from './RatingStars.vue'
 
 const props = defineProps({
   product: { type: Object, default: (): Product => ({} as Product) },
@@ -57,19 +60,44 @@ const discountedPrice = computed(() =>
   border-radius: 0.25rem;
 }
 .product-item__info {
-  padding: 0.75rem;
+  padding: 0.75rem 0.75rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: space-between;
 }
 .product-item__title {
   font-weight: bold;
   font-size: 1.25rem;
   line-height: 1.5rem;
+  color: #000;
 }
-.product-item__price-value--discounted {
-  text-decoration: line-through;
+.product-item__description {
+  margin: 0.5rem 0;
 }
 .product-item__details {
   display: flex;
   align-items: flex-end;
+  justify-content: space-between;
+}
+.product-item__rating {
+  flex-grow: 1;
+}
+.product-item__price {
+  flex-grow: 1;
+}
+.product-item__price-discount {
+  color: var(--color-accent);
+  font-weight: bold;
+  font-size: 1rem;
+  line-height: 1rem;
+}
+.product-item__price-value {
+  color: #000;
+  font-weight: bold;
+}
+.product-item__price-value--discounted {
+  text-decoration: line-through;
 }
 .product-item__image {
   height: 15rem;
