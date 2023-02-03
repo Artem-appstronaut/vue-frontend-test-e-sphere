@@ -3,7 +3,10 @@
     <SearchBlock
       class="product-list__search-block"
       :search-phrase="searchPhrase"
+      :categories-list="categoriesList"
       @search-input="searchProducts"
+      @select-category="filterByCategory"
+      @reset-category="filterByCategory"
     />
     <hr class="product-list__hr" />
     <FiltersBlock
@@ -40,25 +43,39 @@
 <script lang="ts" setup>
 import { computed, onBeforeMount, ref, watch } from 'vue'
 import { useProductStore } from '@/stores/products.store'
+import { useCategoriesStore } from '@/stores/categories.store'
 import PaginationBlock from '@/components/PaginationBlock.vue'
 import SearchBlock from '@/components/SearchBlock.vue'
 import FiltersBlock from '@/components/FiltersBlock.vue'
 import PageLayout from '@/components/PageLayout.vue'
 import ProductItem from '@/components/ProductItem.vue'
 import ListWrapper from '@/components/ListWrapper.vue'
+import type { Category } from '@/types/categories.model'
 
 const title = ref('Front End Challenge')
 const productStore = useProductStore()
+const categoriesStore = useCategoriesStore()
+const selectedCategory = ref('')
 const searchPhrase = ref('')
 const productsPerPage = ref(10)
 const howManyToSkip = ref(0)
 const loading = ref(true)
 const productList = computed(() => productStore.productList)
+const categoriesList = computed(() => categoriesStore.categoriesList)
 
 const getProducts = async () => {
   loading.value = true
   await productStore.getProductList({
     searchPhrase: searchPhrase.value,
+    productsPerPage: productsPerPage.value,
+    howManyToSkip: howManyToSkip.value,
+  })
+  loading.value = false
+}
+const getProductsOfCategory = async (category: Category) => {
+  loading.value = true
+  await productStore.getProductsOfCategory({
+    category,
     productsPerPage: productsPerPage.value,
     howManyToSkip: howManyToSkip.value,
   })
@@ -73,15 +90,30 @@ const changePageLimit = (e: any) => {
 const changePage = (page: number) => {
   howManyToSkip.value = page * productsPerPage.value - productsPerPage.value
 }
+const filterByCategory = (category: string) => {
+  if (!category) return getProducts()
 
-watch([searchPhrase, productsPerPage, howManyToSkip], getProducts)
+  selectedCategory.value = category
+}
+const getList = () => {
+  if (selectedCategory.value)
+    return getProductsOfCategory(selectedCategory.value)
+
+  getProducts()
+}
+
+watch([searchPhrase, selectedCategory, productsPerPage, howManyToSkip], getList)
 
 onBeforeMount(() => {
-  getProducts()
+  categoriesStore.getCategoriesList()
+  getList()
 })
 </script>
 
 <style lang="scss" scoped>
+.product-list {
+  width: 100;
+}
 @media (min-width: 1024px) {
   .product-list {
     min-height: 100vh;

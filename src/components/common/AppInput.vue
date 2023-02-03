@@ -1,12 +1,10 @@
 <template>
   <div class="app-input">
-    <label v-if="label" class="app-input__label" for="searchInput">{{
-      label
-    }}</label>
+    <label v-if="label" class="app-input__label" :for="name">{{ label }}</label>
     <input
       class="app-input__input"
-      name="searchInput"
       type="text"
+      :name="name"
       :value="value"
       :placeholder="placeholder"
       @input="debouncedSearch"
@@ -18,7 +16,7 @@
 const props = defineProps({
   value: { type: String, default: '' },
   label: { type: String, default: '' },
-  inputName: { type: String, default: '' },
+  name: { type: String, default: '' },
   placeholder: { type: String, default: '' },
   debounceDuration: { type: Number, default: 2000 },
 })

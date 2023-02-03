@@ -1,6 +1,4 @@
-export type Category = string
-
-export type Categories = Category[]
+import type { Category } from './categories.model'
 
 export interface Product {
   id: number
@@ -17,6 +15,7 @@ export interface Product {
 }
 
 export interface QueryParams {
+  category?: Category
   searchPhrase?: string
   productsPerPage: number
   howManyToSkip: number
