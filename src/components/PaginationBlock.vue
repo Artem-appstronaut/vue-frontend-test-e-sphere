@@ -1,39 +1,41 @@
 <template>
   <div class="pagination">
-    <AppSelect
-      class="pagination__limit"
-      :value="productsPerPage"
-      :options="productsPerPageOptions"
-      @change="$emit('changePageLimit', $event)"
-    />
-    <div v-if="totalItems && totalPages > 1" class="pagination__list">
-      <div
-        v-if="howManyToSkip > 0"
-        class="pagination__item pagination__item--arrow"
-        @click="$emit('changePage', activePage - 1)"
-      >
-        &#10094;
-      </div>
-      <template v-for="page in totalPages" :key="page">
+    <div class="pagination__wrapper">
+      <AppSelect
+        class="pagination__limit"
+        :value="productsPerPage"
+        :options="productsPerPageOptions"
+        @change="$emit('changePageLimit', $event)"
+      />
+      <div v-if="totalItems && totalPages > 1" class="pagination__list">
         <div
-          v-if="isPageNumberVisible(page)"
-          class="pagination__item pagination__item--number"
-          :class="{ 'pagination__item--active': page === activePage }"
-          @click="$emit('changePage', page)"
+          v-if="howManyToSkip > 0"
+          class="pagination__item pagination__item--arrow"
+          @click="$emit('changePage', activePage - 1)"
         >
-          {{ page }}
+          &#10094;
         </div>
-      </template>
-      <div
-        v-if="howManyToSkip + productsPerPage < totalItems"
-        class="pagination__item pagination__item--arrow"
-        @click="$emit('changePage', activePage + 1)"
-      >
-        &#10095;
+        <template v-for="page in totalPages" :key="page">
+          <div
+            v-if="isPageNumberVisible(page)"
+            class="pagination__item pagination__item--number"
+            :class="{ 'pagination__item--active': page === activePage }"
+            @click="$emit('changePage', page)"
+          >
+            {{ page }}
+          </div>
+        </template>
+        <div
+          v-if="howManyToSkip + productsPerPage < totalItems"
+          class="pagination__item pagination__item--arrow"
+          @click="$emit('changePage', activePage + 1)"
+        >
+          &#10095;
+        </div>
       </div>
-    </div>
-    <div class="pagination__empty">
-      <!-- empty block for better alignement -->
+      <div class="pagination__empty">
+        <!-- empty block for better alignement -->
+      </div>
     </div>
   </div>
 </template>
@@ -79,16 +81,21 @@ const isPageNumberVisible = (page: number) => {
 
 <style lang="scss" scoped>
 .pagination {
+  width: 100%;
   padding: 1rem 2rem;
   position: fixed;
   bottom: 0;
   left: 0;
+  background-color: #fff;
+}
+.pagination__wrapper {
   width: 100%;
-  margin-top: 2rem;
+  max-width: 1600px;
+  margin: 2rem auto 0;
+  padding: 0 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #fff;
 }
 .pagination__limit,
 .pagination__list,
