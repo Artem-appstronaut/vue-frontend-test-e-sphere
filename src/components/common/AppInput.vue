@@ -37,5 +37,9 @@ const debouncedSearch = (e: any) => {
 .app-input {
   display: flex;
   flex-direction: column;
+  font-size: 1rem;
+}
+.app-input__input {
+  padding: 0.25rem;
 }
 </style>

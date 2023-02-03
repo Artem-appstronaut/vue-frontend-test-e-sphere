@@ -12,7 +12,7 @@
         class="pagination__item pagination__item--arrow"
         @click="$emit('changePage', activePage - 1)"
       >
-        &lt;
+        &#10094;
       </div>
       <template v-for="page in totalPages" :key="page">
         <div
@@ -29,7 +29,7 @@
         class="pagination__item pagination__item--arrow"
         @click="$emit('changePage', activePage + 1)"
       >
-        &gt;
+        &#10095;
       </div>
     </div>
     <div class="pagination__empty">
@@ -79,10 +79,16 @@ const isPageNumberVisible = (page: number) => {
 
 <style lang="scss" scoped>
 .pagination {
+  padding: 1rem 2rem;
+  position: fixed;
+  bottom: 0;
+  left: 0;
   width: 100%;
+  margin-top: 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background-color: #fff;
 }
 .pagination__limit,
 .pagination__list,
@@ -92,13 +98,25 @@ const isPageNumberVisible = (page: number) => {
 .pagination__list {
   display: flex;
   justify-content: center;
+  align-items: center;
+  gap: 0rem;
 }
 .pagination__item {
   cursor: pointer;
 }
+.pagination__item--arrow,
 .pagination__item--number {
+  padding: 0.15rem 0.55rem;
+}
+.pagination__item--arrow {
+  font-weight: bold;
+}
+.pagination__item--number {
+  padding: 0.15rem 0.55rem;
   &.pagination__item--active {
-    color: var(--color-accent);
+    color: #fff;
+    background-color: var(--color-accent);
+    border-radius: 50%;
   }
 }
 </style>

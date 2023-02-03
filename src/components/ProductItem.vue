@@ -6,26 +6,29 @@
     >
       <!-- image on background -->
     </div>
-    <h2 class="product-item__title">{{ product.title }}</h2>
-    <p class="product-item__description">{{ product.description }}</p>
-    <div class="product-item__details">
-      <div class="product-item__price">
-        <div
-          v-if="product.discountPercentage"
-          class="product-item__price-discount"
-        >
-          {{ discountedPrice }}
+    <div class="product-item__info">
+      <h2 class="product-item__title">{{ product.title }}</h2>
+      <p class="product-item__description">{{ product.description }}</p>
+      <div class="product-item__details">
+        <div class="product-item__price">
+          <div
+            v-if="product.discountPercentage"
+            class="product-item__price-discount"
+          >
+            {{ discountedPrice }}
+          </div>
+          <div
+            class="product-item__price-value"
+            :class="{
+              'product-item__price-value--discounted':
+                product.discountPercentage,
+            }"
+          >
+            {{ product.price }}
+          </div>
         </div>
-        <div
-          class="product-item__price-value"
-          :class="{
-            'product-item__price-value--discounted': product.discountPercentage,
-          }"
-        >
-          {{ product.price }}
-        </div>
+        <div class="product-item__rating">{{ product.rating }}</div>
       </div>
-      <div class="product-item__rating">{{ product.rating }}</div>
     </div>
   </div>
 </template>
@@ -50,6 +53,16 @@ const discountedPrice = computed(() =>
 .product-item {
   display: flex;
   flex-direction: column;
+  border: 1px solid black;
+  border-radius: 0.25rem;
+}
+.product-item__info {
+  padding: 0.75rem;
+}
+.product-item__title {
+  font-weight: bold;
+  font-size: 1.25rem;
+  line-height: 1.5rem;
 }
 .product-item__price-value--discounted {
   text-decoration: line-through;
@@ -59,7 +72,7 @@ const discountedPrice = computed(() =>
   align-items: flex-end;
 }
 .product-item__image {
-  height: 300px;
+  height: 15rem;
   width: 100%;
   background-repeat: no-repeat;
   background-position: center;
@@ -67,22 +80,17 @@ const discountedPrice = computed(() =>
 }
 @media (min-width: 768px) {
   .product-item__image {
-    height: 250px;
+    height: 12rem;
   }
 }
 @media (min-width: 1024px) {
   .product-item__image {
-    height: 200px;
-  }
-}
-@media (min-width: 1200px) {
-  .product-item__image {
-    height: 150px;
+    height: 10rem;
   }
 }
 @media (min-width: 1500px) {
   .product-item__image {
-    height: 100px;
+    height: 8rem;
   }
 }
 </style>

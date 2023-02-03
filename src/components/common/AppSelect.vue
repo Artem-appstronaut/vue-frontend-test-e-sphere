@@ -30,7 +30,7 @@
       class="app-select__reset"
       @click="$emit('reset')"
     >
-      x
+      &#10005;
     </div>
   </div>
 </template>
@@ -59,11 +59,20 @@ defineEmits(['change', 'reset'])
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  font-size: 1rem;
+}
+.app-select__select {
+  padding: 0.25rem;
 }
 .app-select__reset {
   position: absolute;
-  right: 1.2rem;
-  bottom: 0.1rem;
+  padding: 0.25rem 0.35rem;
+  right: 1rem;
+  bottom: 0.35rem;
+  font-size: 0.5rem;
+  line-height: 0.5rem;
+  background-color: #bbb;
+  border-radius: 50%;
   cursor: pointer;
 }
 </style>

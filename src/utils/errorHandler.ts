@@ -13,3 +13,7 @@ export const fetchListErrorHandler = (
     error: true,
   }
 }
+
+export default {
+  fetchListErrorHandler,
+}

@@ -32,10 +32,21 @@ const getMessage = computed(() =>
 </script>
 
 <style lang="scss" scoped>
+.list {
+  display: flex;
+  flex-grow: 1;
+  align-items: flex-start;
+}
 .list__items {
   display: grid;
   grid-template-columns: 1fr;
   gap: 2rem;
+}
+.list__loading-message,
+.list__empty-message {
+  width: 100%;
+  align-self: center;
+  text-align: center;
 }
 @media (min-width: 768px) {
   .list__items {

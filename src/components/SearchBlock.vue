@@ -13,7 +13,7 @@
     <div class="search__select">
       <AppSelect
         :key="selectKey"
-        label="Search:"
+        label="Category:"
         name="searchInput"
         :value="selectedCategory"
         :options="categoriesList"
@@ -43,13 +43,13 @@ const categoryPlaceholder = 'Select category'
 const selectKey = ref(0)
 
 const inputSearchText = (searchText: any) => {
+  selectedCategory.value = ''
+  selectKey.value++
   emits('searchInput', searchText)
-  resetCategory()
 }
 const selectCategory = (e: any) => {
   selectedCategory.value = e.target.value
   selectKey.value++
-  emits('searchInput', '')
   emits('selectCategory', selectedCategory.value)
 }
 const resetCategory = () => {
@@ -61,7 +61,17 @@ const resetCategory = () => {
 
 <style lang="scss" scoped>
 .search {
+  margin: 1rem 0;
   display: flex;
   gap: 2rem;
+}
+.search__input,
+.search__select,
+.search__select-field {
+  width: 100%;
+  max-width: 15rem;
+}
+:deep .app-select__select {
+  width: 100%;
 }
 </style>

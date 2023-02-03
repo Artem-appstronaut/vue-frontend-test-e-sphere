@@ -1,5 +1,18 @@
 import type { Category } from './categories.model'
 
+export type SortKey = 'price' | 'stock' | 'rating'
+export type SortOrder = 'none' | 'asc' | 'desc'
+export type CurrentSort = {
+  key: SortKey
+  order: SortOrder
+}
+
+export interface Sorting {
+  price: SortOrder
+  stock: SortOrder
+  rating: SortOrder
+}
+
 export interface Product {
   id: number
   title: string
@@ -19,6 +32,8 @@ export interface QueryParams {
   searchPhrase?: string
   productsPerPage: number
   howManyToSkip: number
+  sortKey?: string
+  sortOrder?: SortOrder
 }
 
 export interface ProductList {

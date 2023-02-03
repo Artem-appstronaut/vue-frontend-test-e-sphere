@@ -13,6 +13,20 @@ export const useProductStore = defineStore('productStore', () => {
       queryParams,
     )
   }
+  async function getSortedProductList(queryParams: QueryParams) {
+    productList.value = await productService.fetchSortedProducts(queryParams)
+  }
+  async function getSortedProductsOfCategory(queryParams: QueryParams) {
+    productList.value = await productService.fetchSortedProductsOfCategory(
+      queryParams,
+    )
+  }
 
-  return { productList, getProductList, getProductsOfCategory }
+  return {
+    productList,
+    getProductList,
+    getSortedProductList,
+    getProductsOfCategory,
+    getSortedProductsOfCategory,
+  }
 })
