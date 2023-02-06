@@ -91,7 +91,7 @@ const isPageNumberVisible = (page: number) => {
 .pagination__wrapper {
   width: 100%;
   max-width: 1600px;
-  margin: 2rem auto 0;
+  margin: 1rem auto 0;
   padding: 0 2rem;
   display: flex;
   justify-content: space-between;

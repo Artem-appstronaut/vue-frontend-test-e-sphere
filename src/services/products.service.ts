@@ -1,89 +1,36 @@
 import axiosInstance from '@/api'
 import { fetchListErrorHandler } from '@/utils/errorHandler'
-import type { ProductList, Product, QueryParams } from '@/types/products.model'
-import sliceToPage from '@/utils/sliceToPage'
-import soringFunction from '@/utils/sortingFunction'
+import type { ProductList, QueryParams } from '@/types/products.model'
 
 const productService = {
-  fetchProducts: async ({
-    searchPhrase,
-    howManyToSkip,
-    productsPerPage,
-  }: QueryParams): Promise<ProductList> => {
+  fetchProducts: async (
+    { searchPhrase, howManyToSkip, productsPerPage }: QueryParams,
+    sort: unknown,
+  ): Promise<ProductList> => {
+    const urlString = sort
+      ? `products/search?q=${searchPhrase}&limit=100`
+      : `products/search?q=${searchPhrase}&limit=${productsPerPage}&skip=${howManyToSkip}`
+
     try {
-      const { data } = await axiosInstance.get(
-        `products/search?q=${searchPhrase}&limit=${productsPerPage}&skip=${howManyToSkip}`,
-      )
+      const { data } = await axiosInstance.get(urlString)
       return data
     } catch (error) {
       return fetchListErrorHandler('Error while fetching products:', error)
     }
   },
-  fetchProductsOfCategory: async ({
-    category,
-    howManyToSkip,
-    productsPerPage,
-  }: QueryParams): Promise<ProductList> => {
+  fetchProductsOfCategory: async (
+    { category, howManyToSkip, productsPerPage }: QueryParams,
+    sort: unknown,
+  ): Promise<ProductList> => {
+    const urlString = sort
+      ? `products/category/${category}?limit=100`
+      : `products/category/${category}?limit=${productsPerPage}&skip=${howManyToSkip}`
     try {
-      const { data } = await axiosInstance.get(
-        `products/category/${category}?limit=${productsPerPage}&skip=${howManyToSkip}`,
-      )
+      const { data } = await axiosInstance.get(urlString)
       return data
     } catch (error) {
       return fetchListErrorHandler(
         'Error while fetching products of category:',
-        error,
-      )
-    }
-  },
-  fetchSortedProducts: async ({
-    searchPhrase,
-    howManyToSkip,
-    productsPerPage,
-    sortKey,
-    sortOrder,
-  }: QueryParams): Promise<ProductList> => {
-    try {
-      const { data } = await axiosInstance.get(
-        `products/search?q=${searchPhrase}&limit=100`,
-      )
-
-      if (sortKey && sortOrder) {
-        data.products.sort((a: Product, b: Product) =>
-          soringFunction(a, b, sortKey, sortOrder),
-        )
-      }
-
-      return sliceToPage(data, howManyToSkip, productsPerPage)
-    } catch (error) {
-      return fetchListErrorHandler(
-        'Error while fetching sorted products:',
-        error,
-      )
-    }
-  },
-  fetchSortedProductsOfCategory: async ({
-    category,
-    howManyToSkip,
-    productsPerPage,
-    sortKey,
-    sortOrder,
-  }: QueryParams): Promise<ProductList> => {
-    try {
-      const { data } = await axiosInstance.get(
-        `products/category/${category}?limit=100`,
-      )
-
-      if (sortKey && sortOrder) {
-        data.products.sort((a: Product, b: Product) =>
-          soringFunction(a, b, sortKey, sortOrder),
-        )
-      }
-
-      return sliceToPage(data, howManyToSkip, productsPerPage)
-    } catch (error) {
-      return fetchListErrorHandler(
-        'Error while fetching sorted products of category:',
         error,
       )
     }
