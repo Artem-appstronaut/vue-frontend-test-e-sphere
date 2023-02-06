@@ -15,7 +15,7 @@ const sortingProducts = (
   let valueB: number = b[sortKey as keyof Product] as number
   if (sortKey === 'price') {
     valueA = countDiscountedPrice(valueA, a.discountPercentage)
-    valueB = countDiscountedPrice(valueB, a.discountPercentage)
+    valueB = countDiscountedPrice(valueB, b.discountPercentage)
   }
 
   return sortOrder === 'asc' ? valueA - valueB : valueB - valueA
