@@ -7,6 +7,7 @@ const router = createRouter({
       path: '/',
       name: 'productList',
       component: () => import('../views/ProductListView.vue'),
+      props: { title: 'Front End Challenge' },
     },
   ],
 })
