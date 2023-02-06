@@ -28,15 +28,13 @@ const filledPercent = computed(() => {
 <style lang="scss" scoped>
 .star-ratings-css {
   unicode-bidi: bidi-override;
-  color: #fff;
+  color: var(--color-accent);
   font-size: 20px;
   width: 100px;
   position: relative;
-  text-shadow: 0 0 10px #000;
 }
 .star-ratings-css::before {
-  content: '★★★★★';
-  opacity: 0.3;
+  content: '☆☆☆☆☆';
 }
 
 // mixin to
