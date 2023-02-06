@@ -7,7 +7,9 @@
       <!-- image on background -->
     </div>
     <div class="product-item__info">
-      <h2 class="product-item__title">{{ product.title }}</h2>
+      <h2 class="product-item__title" :title="product.title">
+        {{ product.title }}
+      </h2>
       <p class="product-item__description">{{ product.description }}</p>
       <div class="product-item__details">
         <div class="product-item__price">
@@ -61,19 +63,27 @@ const discountedPrice = computed(() =>
 }
 .product-item__info {
   padding: 0.75rem 0.75rem 1.5rem;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
   justify-content: space-between;
 }
 .product-item__title {
+  height: 1.5rem;
+  margin-bottom: 0.5rem;
+  display: flex;
   font-weight: bold;
   font-size: 1.25rem;
   line-height: 1.5rem;
   color: #000;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-break: break-all;
 }
 .product-item__description {
   margin: 0.5rem 0;
+  flex-grow: 1;
 }
 .product-item__details {
   display: flex;
@@ -82,13 +92,13 @@ const discountedPrice = computed(() =>
 }
 .product-item__price {
   flex-grow: 1;
-  font-size: 1.25rem;
-  line-height: 1.5rem;
+  font-size: 1.15rem;
+  line-height: 1.35rem;
 }
 .product-item__price-discount {
   color: var(--color-accent);
   font-weight: bold;
-  font-size: 1.55rem;
+  font-size: 1.35rem;
 }
 .product-item__price-value {
   color: #000;
