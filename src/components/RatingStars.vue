@@ -29,8 +29,8 @@ const filledPercent = computed(() => {
 .star-ratings-css {
   unicode-bidi: bidi-override;
   color: #fff;
-  font-size: 25px;
-  width: 125px;
+  font-size: 20px;
+  width: 100px;
   position: relative;
   text-shadow: 0 0 10px #000;
 }
@@ -76,13 +76,12 @@ const filledPercent = computed(() => {
 .star-ratings-css::after {
   color: var(--color-accent);
   content: '★★★★★';
-  text-shadow: 0 1px 0 var(--color-accent);
+  text-shadow: 0 0 1px var(--color-accent);
   position: absolute;
   z-index: 1;
   display: block;
   left: 0;
   top: 0;
-  width: attr(rating);
   overflow: hidden;
 }
 </style>
