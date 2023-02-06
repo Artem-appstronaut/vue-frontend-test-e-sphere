@@ -1,17 +1,11 @@
 <template>
   <div class="rating">
-    <div class="stars__empty">
-      <span v-for="i in 5" :key="i" class="star">&star;</span>
-    </div>
-    <div class="starts__full">
-      <span
-        v-for="i in 5"
-        :key="i"
-        class="star"
-        :class="{ 'starts__full--empty': i > filledStars }"
-        >&starf;</span
-      >
-    </div>
+    <!-- access key represents fill coverage of the stars -->
+    <div
+      class="star-ratings-css"
+      :title="props.rating.toString()"
+      :accesskey="filledPercent.toString()"
+    ></div>
   </div>
 </template>
 
@@ -22,26 +16,73 @@ const props = defineProps({
   rating: { type: Number, default: 0 },
 })
 
-const filledStars = computed(() => Math.floor(props.rating))
-const remainder = computed(() =>
-  Math.round((props.rating - filledStars.value) * 100),
-)
+const filledPercent = computed(() => {
+  const percentRating = Math.round((props.rating / 5) * 100)
+  const nearest = percentRating % 10 < 5 ? 5 : 10
+
+  // round value to closest 5 or 10
+  return (Math.round(percentRating / nearest) * nearest) / 100
+})
 </script>
 
 <style lang="scss" scoped>
-.rating {
-  width: 100%;
+.star-ratings-css {
+  unicode-bidi: bidi-override;
+  color: #fff;
+  font-size: 25px;
+  width: 125px;
   position: relative;
+  text-shadow: 0 0 10px #000;
 }
-.stars__empty,
-.starts__full {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  font-size: 1rem;
+.star-ratings-css::before {
+  content: '★★★★★';
+  opacity: 0.3;
+}
+
+// mixin to
+@mixin width-keys($keys...) {
+  @each $key in $keys {
+    [accesskey='#{$key}']::after {
+      width: percentage($key);
+    }
+  }
+}
+
+// list of keys which represent percentage coverage with 5% step
+@include width-keys(
+  0,
+  0.05,
+  0.1,
+  0.15,
+  0.2,
+  0.25,
+  0.3,
+  0.35,
+  0.4,
+  0.45,
+  0.5,
+  0.55,
+  0.6,
+  0.65,
+  0.7,
+  0.75,
+  0.8,
+  0.85,
+  0.9,
+  0.95,
+  1
+);
+
+.star-ratings-css::after {
   color: var(--color-accent);
-}
-.starts__full--empty {
-  color: transparent;
+  content: '★★★★★';
+  text-shadow: 0 1px 0 var(--color-accent);
+  position: absolute;
+  z-index: 1;
+  display: block;
+  left: 0;
+  top: 0;
+  width: attr(rating);
+  overflow: hidden;
 }
 </style>
