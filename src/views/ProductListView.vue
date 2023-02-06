@@ -48,7 +48,10 @@ import ProductItem from '@/components/ProductItem.vue'
 import ListWrapper from '@/components/ListWrapper.vue'
 import type { Category } from '@/types/categories.model'
 
-const title = ref('Front End Challenge')
+defineProps({
+  title: { type: String, default: 'Product List' },
+})
+
 const productStore = useProductStore()
 const categoriesStore = useCategoriesStore()
 const selectedCategory = ref('')
