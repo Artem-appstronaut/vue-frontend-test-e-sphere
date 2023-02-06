@@ -80,17 +80,15 @@ const discountedPrice = computed(() =>
   align-items: flex-end;
   justify-content: space-between;
 }
-.product-item__rating {
-  flex-grow: 1;
-}
 .product-item__price {
   flex-grow: 1;
+  font-size: 1.25rem;
+  line-height: 1.5rem;
 }
 .product-item__price-discount {
   color: var(--color-accent);
   font-weight: bold;
-  font-size: 1rem;
-  line-height: 1rem;
+  font-size: 1.55rem;
 }
 .product-item__price-value {
   color: #000;
