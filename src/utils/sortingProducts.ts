@@ -1,7 +1,11 @@
 import type { Product } from '@/types/products.model'
-import countDiscountedPrice from './countDiscountedPrice'
 
-const soringFunction = (
+const countDiscountedPrice = (
+  price: number,
+  discountPercentage: number,
+): number => Math.round(price - (discountPercentage / 100) * price)
+
+const sortingProducts = (
   a: Product,
   b: Product,
   sortKey: string,
@@ -16,5 +20,4 @@ const soringFunction = (
 
   return sortOrder === 'asc' ? valueA - valueB : valueB - valueA
 }
-
-export default soringFunction
+export default sortingProducts

@@ -16,7 +16,7 @@ defineProps({
 <style lang="scss" scoped>
 .page {
   min-height: 100vh;
-  padding: 2rem 0 4rem;
+  padding: 2rem 0 5rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;

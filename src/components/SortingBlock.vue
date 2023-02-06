@@ -18,15 +18,14 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import decodeHTML from '@/utils/decodeHTML'
 import type { Sorting, SortKey, SortOrder } from '@/types/products.model'
+import { useProductStore } from '@/stores/products.store'
 
-defineProps({
-  limit: { type: Number, default: 0 },
-  total: { type: Number, default: 0 },
-})
-const emits = defineEmits(['switchSort'])
+const productStore = useProductStore()
+const limit = computed(() => productStore.displayItems)
+const total = computed(() => productStore.totalItems)
 
 const sorting = ref<Sorting>({
   price: 'none',
@@ -61,7 +60,7 @@ const sortBy = (key: SortKey, currentState: SortOrder) => {
     else switchSort(sort, currentState)
   }
 
-  emits('switchSort', key, sorting.value[key])
+  productStore.switchProductSortType(key, sorting.value[key])
 }
 </script>
 
