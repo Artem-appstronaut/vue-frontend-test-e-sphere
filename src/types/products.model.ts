@@ -7,10 +7,8 @@ export type CurrentSort = {
   order: SortOrder
 }
 
-export interface Sorting {
-  price: SortOrder
-  stock: SortOrder
-  rating: SortOrder
+export type Sorting = {
+  [key in SortKey]: SortOrder
 }
 
 export interface Product {
