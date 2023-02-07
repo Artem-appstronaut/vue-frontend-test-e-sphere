@@ -7,7 +7,7 @@
       :name="name"
       :value="value"
       :placeholder="placeholder"
-      @input="debouncedSearch"
+      @input="debouncedInput"
     />
   </div>
 </template>
@@ -23,11 +23,11 @@ const props = defineProps({
 
 const emits = defineEmits(['input'])
 
-let searchTimeout: number | null = null
+let debounceTimeout: number | null = null
 
-const debouncedSearch = (e: any) => {
-  if (searchTimeout) clearTimeout(searchTimeout)
-  searchTimeout = setTimeout(() => {
+const debouncedInput = (e: any) => {
+  if (debounceTimeout) clearTimeout(debounceTimeout)
+  debounceTimeout = setTimeout(() => {
     emits('input', e.target.value)
   }, props.debounceDuration)
 }
